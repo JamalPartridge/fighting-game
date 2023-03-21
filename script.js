@@ -24,24 +24,50 @@ const gravity = 0.7
 //Giving a form of gravity handles JUMP
 
 class Sprite {
-    constructor({position, velocity}){
+    constructor({position, velocity, color = '#4343Ea', offset}){
         //The argument position within the constructor is to control the position of individual characters and not alter the whole page. 
         this.position = position
         this.velocity = velocity
+        this.width = 50
         this.height = 150
         this.lastKey
+        this.attackBox = {
+            position: {
+                x: this.position.x,
+                y: this.position.y,
+            },
+            offset,
+            width: 100, 
+            height: 50,
+        }
         //Wrapped these in an object to hold shape of object
+        this.color = color
+        this.isAttacking
     }
     draw(){
-        contxt.fillStyle = 'red'
+        // CHANGES THE CHARACTERS COLOR
+        contxt.fillStyle = this.color
+    
         //defining what a character looks like
-        contxt.fillRect(this.position.x, this.position.y, 50, this.height)
+        contxt.fillRect(this.position.x, this.position.y, this.width, this.height)
+
+        // this is where the attack box is drawn
+        if(this.isAttacking){
+        contxt.fillStyle = "red"
+        contxt.fillRect(
+            this.attackBox.position.x, 
+            this.attackBox.position.y, 
+            this.attackBox.width, 
+            this.attackBox.height)
+        }
     }
 
     update(){
         //updating properties to move across the screen
         this.draw()
         //calling draw to be updated as needed
+        this.attackBox.position.x = this.position.x + this.attackBox.offset.x
+        this.attackBox.position.y = this.position.y
         this.position.x += this.velocity.x
         //defining how player moves on x axis 
         this.position.y += this.velocity.y
@@ -49,7 +75,13 @@ class Sprite {
         if(this.position.y + this.height + this.velocity.y >= canvas.height){
             this.velocity.y = 0
         } else this.velocity.y += gravity
-        //The argument is managing the players to fit to the height of the canvas and when that event is met it ensures that they do not go off screen. 
+        //The argument is managing the players to fit to the height of the canvas and when that event is met it ensures that they do not go off screen.  
+    }
+    attack(){
+       this.isAttacking = true
+       setTimeout(() => {
+        this.isAttacking = false
+       }, 100)
     }
 }
 
@@ -68,6 +100,10 @@ const player = new Sprite({
     velocity: {
         x:0,
         y:0
+    },
+    offset: {
+        x: 0,
+        y: 0
     }
     //Keeps player from moving by default. 
 })
@@ -84,6 +120,11 @@ const op = new Sprite({
    velocity: {
     x:0,
     y:0,
+   },
+   color: 'yellow',
+   offset: {
+    x: -50,
+    y: 0
    }
    //Velocity at 0 as a starting point
 })
@@ -109,6 +150,14 @@ const keys = {
 
 }
 
+function rectangularCollision({rectangle1, rectangle2}){
+    return(
+        rectangle1.attackBox.position.x + rectangle1.attackBox.width >= rectangle2.position.x && 
+        rectangle1.attackBox.position.x <= rectangle2.position.x + rectangle2.width && 
+        rectangle1.attackBox.position.y + rectangle1.attackBox.height >= rectangle2.position.y && 
+        rectangle1.attackBox.position.y <= rectangle2.position.y + rectangle2.height
+    )
+}
 
 
 function animate(){
@@ -137,7 +186,28 @@ function animate(){
    } else if (keys.ArrowRight.pressed && op.lastKey === 'ArrowRight'){
     op.velocity.x = 5
    }
+//    detect collision
+   if (
+    rectangularCollision({
+        rectangle1: player,
+        rectangle2: op
+    })
+    && player.isAttacking
+    ){
+    player.isAttacking = false
+    console.log('go')
+   }
 
+   if (
+    rectangularCollision({
+        rectangle1: op,
+        rectangle2: player
+    })
+    && op.isAttacking
+    ){
+    op.isAttacking = false
+    console.log('eneny attack successful')
+   }
 }
 
 animate()
@@ -160,6 +230,9 @@ window.addEventListener('keydown', (event) => {
             player.velocity.y = -20
             //changed to handle how high we jump
             break
+        case ' ':
+            player.attack()
+            break
     
 //PLAYER TWO 
    
@@ -174,6 +247,9 @@ window.addEventListener('keydown', (event) => {
         case 'ArrowUp':
             op.velocity.y = -20
             break
+        case 'ArrowDown': 
+            op.isAttacking = true
+            break   
     }
    
 //This is creating an event listener for when pressing down on a key.
