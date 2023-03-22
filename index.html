@@ -1,2 +1,49 @@
-<canvas></canvas>
-<script src="script.js"></script>
+<head>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+    </style>
+</head>
+<body>
+    <!-- red container div -->
+    <div class="traine" style="position: relative; display: inline-block;
+    "> 
+
+        <!-- smaller red contanier div -->
+        <div style="
+        position: absolute; 
+        display: flex;
+        width: 100%; 
+        align-items: center; 
+        padding: 20px">
+
+            <!-- player health -->
+            <div id="playerHealth" style="
+            background-color: orange; 
+            height: 30px; 
+            width: 100%;"></div>
+
+            <!-- timer -->
+            <div id="timer" style="
+            background-color:#4343ea;
+            width: 100px; 
+            height: 100px; 
+            flex-shrink: 0;"></div>
+
+            <!-- op health -->
+            <div id="enemyHealth" style="
+            background-color: orange; 
+            height: 30px; 
+            width: 100%;"></div>
+
+        </div> 
+    </div>
+    <canvas></canvas>
+    
+    <script src="script.js"></script>
+
+</body>
+ 
