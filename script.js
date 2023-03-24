@@ -43,6 +43,7 @@ class Sprite {
         //Wrapped these in an object to hold shape of object
         this.color = color
         this.isAttacking
+        this.health = 100
     }
     draw(){
         // CHANGES THE CHARACTERS COLOR
@@ -195,7 +196,9 @@ function animate(){
     && player.isAttacking
     ){
     player.isAttacking = false
-    document.querySelector('#enemyHealth').style.width = '20%'
+    //Dealing with decreasing enemy health 
+    op.health -= 20
+    document.querySelector('#enemyHealth').style.width = op.health + '%'
    }
 
    if (
@@ -206,7 +209,8 @@ function animate(){
     && op.isAttacking
     ){
     op.isAttacking = false
-    console.log('eneny attack successful')
+    player.health -= 20
+    document.querySelector('#playerHealth').style.width = player.health + '%'
    }
 }
 
@@ -248,7 +252,7 @@ window.addEventListener('keydown', (event) => {
             op.velocity.y = -20
             break
         case 'ArrowDown': 
-            op.isAttacking = true
+            op.attack()
             break   
     }
    

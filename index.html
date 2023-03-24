@@ -9,10 +9,10 @@
 </head>
 <body>
     <!-- red container div -->
-    <div class="traine" style="position: relative; display: inline-block;
+    <div style="position: relative; display: inline-block;
     "> 
 
-        <!-- smaller red contanier div -->
+        <!-- smaller red container div -->
         <div style="
         position: absolute; 
         display: flex;
@@ -21,10 +21,13 @@
         padding: 20px">
 
             <!-- player health -->
-            <div id="playerHealth" style="
-            background-color: orange; 
-            height: 30px; 
-            width: 100%;"></div>
+            <div style="position: relative; height: 30px; width: 100%; display: flex; justify-content: flex-end;">
+                <div 
+                style="background-color: orange; height: 30px; width: 100%;"></div>
+                <div 
+                id="playerHealth" 
+                style="position: absolute; background: blue; top: 0; right: 0; bottom:0; width: 100%;"></div>
+            </div>
 
             <!-- timer -->
             <div id="timer" style="
@@ -34,16 +37,17 @@
             flex-shrink: 0;"></div>
 
             <!-- op health -->
-            <div id="enemyHealth" style="
-            background-color: orange; 
-            height: 30px; 
-            width: 100%;"></div>
-
+          <div style="position: relative; height: 30px; width: 100%">
+          <div 
+          style="background-color: orange; height: 30px;"></div>
+          <div 
+          id="enemyHealth" 
+          style="position: absolute; background: blue; top: 0; right: 0; bottom:0; left:0"></div>
+          </div>
+          <div></div>
         </div> 
+        <canvas></canvas>
     </div>
-    <canvas></canvas>
-    
     <script src="script.js"></script>
-
 </body>
  
